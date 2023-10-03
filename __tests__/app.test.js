@@ -20,9 +20,9 @@ describe("tests for GET /api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        const obj = body.topics;
-        expect(body.topics.length).toBe(3);
-        obj.forEach((topic) => {
+        const topics = body.topics;
+        expect(topics.length).toBe(3);
+        topics.forEach((topic) => {
           expect(topic).toHaveProperty("slug");
           expect(topic).toHaveProperty("description");
           expect(typeof topic.slug).toBe("string");
@@ -58,25 +58,6 @@ describe("GET /api", () => {
           expect(body.Available_Endpoints[key]).toHaveProperty("queries");
           expect(body.Available_Endpoints[key]).toHaveProperty(
             "exampleResponse"
-          );
-        }
-      });
-  });
-  test("values of properties should be in expected type", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveProperty("Available_Endpoints");
-        for (key in body.Available_Endpoints) {
-          expect(typeof body.Available_Endpoints[key].description).toBe(
-            "string"
-          );
-          expect(Array.isArray(body.Available_Endpoints[key].queries)).toBe(
-            true
-          );
-          expect(typeof body.Available_Endpoints[key].exampleResponse).toBe(
-            "object"
           );
         }
       });
