@@ -20,9 +20,9 @@ describe("tests for GET /api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        const obj = body.topics
-        expect(body.topics.length).toBe(3);
-        obj.forEach((topic) => {
+        const topics = body.topics;
+        expect(topics.length).toBe(3);
+        topics.forEach((topic) => {
           expect(topic).toHaveProperty("slug");
           expect(topic).toHaveProperty("description");
           expect(typeof topic.slug).toBe("string");
@@ -32,13 +32,49 @@ describe("tests for GET /api/topics", () => {
   });
 });
 
-xdescribe('test for invalid paths',()=>{
-    test("should return 404 status code if path was wrong", () => {
-        return request(app)
-          .get("/api/topicssss")
-          .expect(404)
-          .then(({ body }) => {
-            expect(body.message).toBe("path not found");
-          });
+describe("test for invalid paths", () => {
+  test("should return 404 status code if path was wrong", () => {
+    return request(app)
+      .get("/api/topicssss")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("path not found");
       });
-})
+  });
+});
+
+describe("GET /api", () => {
+  test("should return 200 status code", () => {
+    return request(app).get("/api").expect(200);
+  });
+  test("results should have all required properties", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("Available_Endpoints");
+        for (key in body.Available_Endpoints) {
+          expect(body.Available_Endpoints[key]).toHaveProperty("description");
+          expect(body.Available_Endpoints[key]).toHaveProperty("queries");
+          expect(body.Available_Endpoints[key]).toHaveProperty(
+            "exampleResponse"
+          );
+        }
+      });
+  });
+  test("should return all available endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        const currentEndpoints = Object.keys(body.Available_Endpoints).map(
+          (x) => {
+            return x;
+          }
+        );
+        currentEndpoints.forEach((endpoint) => {
+          expect(body.Available_Endpoints).toHaveProperty(endpoint);
+        });
+      });
+  });
+});
