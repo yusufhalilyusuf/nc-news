@@ -99,6 +99,25 @@ describe("GET /api/articles/:articleId", () => {
         expect(article).toHaveProperty("article_img_url");
       });
   });
+  test("should return expected object", () => {
+    const expectedArticle = {
+      article_id: 1,
+      title: 'Living in the shadow of a great man',
+      topic: 'mitch',
+      author: 'butter_bridge',
+      body: 'I find this existence challenging',
+      created_at: '2020-07-09T20:11:00.000Z',
+      votes: 100,
+      article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+    }
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        const article = body.article[0];
+        expect(article).toEqual(expectedArticle)
+      });
+  });
   test("should return 404 status code if article id doesn't exist in db", () => {
     return request(app)
       .get("/api/articles/1000")
@@ -113,6 +132,37 @@ describe("GET /api/articles/:articleId", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.message).toBe("bad request");
+      });
+  });
+});
+
+describe("GET /api/articles", () => {
+  test("should return 200 status code", () => {
+    return request(app).get("/api/articles").expect(200);
+  });
+  test("should return all articles with expected properties", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        body.articles.forEach((article) => {
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("title");
+          expect(article).toHaveProperty("article_id");
+          expect(article).toHaveProperty("topic");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("article_img_url");
+          expect(article).toHaveProperty("comment_count");
+        });
+      });
+  });
+  test("should return results sorted by date in descending order as default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", { descending: true });
       });
   });
 });
