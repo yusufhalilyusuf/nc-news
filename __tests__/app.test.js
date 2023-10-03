@@ -166,3 +166,47 @@ describe("GET /api/articles", () => {
       });
   });
 });
+describe("GET  /api/articles/:article_id/comments", () => {
+  test("should return 200 status code", () => {
+    return request(app).get("/api/articles/1/comments").expect(200);
+  });
+  test("should return an object with all expected properties", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        body.comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id");
+          expect(comment).toHaveProperty("votes");
+          expect(comment).toHaveProperty("created_at");
+          expect(comment).toHaveProperty("author");
+          expect(comment).toHaveProperty("body");
+          expect(comment).toHaveProperty("article_id");
+        });
+      });
+  });
+  test("should return results sorted by date in descending order as default", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("should return 404 status code if article id doesn't exist in db", () => {
+    return request(app)
+      .get("/api/articles/1000/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("not found");
+      });
+  });
+  test("should return 400 status code if article id is not a number", () => {
+    return request(app)
+      .get("/api/articles/108g7/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request");
+      });
+  });
+});
