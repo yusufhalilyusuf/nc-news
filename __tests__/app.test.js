@@ -209,4 +209,13 @@ describe("GET  /api/articles/:article_id/comments", () => {
         expect(body.message).toBe("bad request");
       });
   });
+  test("should return 200 status code if article id exists but there is no comment for it", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({body})=>{
+        console.log(body);
+        expect(body).toEqual({ comments: [] })
+      })
+  });
 });
