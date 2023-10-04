@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { articleData } = require("../db/data/test-data");
 
 function fetchCommentsByArticleId(article_id) {
   if (isNaN(article_id)) {
@@ -38,7 +39,33 @@ function insertComment(body, commentToBeInserted, article_id, username) {
       return res.rows[0].body;
     });
 }
+
+function deleteCommentFromDb(comment_id) {
+  if (isNaN(comment_id)) {
+    return Promise.reject({ status: 400, message: "bad request" });
+  } else {
+    return db
+      .query(`select comment_id from comments`)
+      .then((comment_ids) => {
+        const currentComments = comment_ids.rows.map((x) => x.comment_id);
+        console.log(currentComments);
+        if (!currentComments.includes(+comment_id)) {
+          console.log("here");
+          return Promise.reject({
+            status: 404,
+            message: "comment id not found",
+          });
+        }
+      })
+      .then(() => {
+        const queryString = `delete from comments where comment_id=$1`;
+        console.log(queryString);
+        return db.query(queryString, [comment_id]);
+      });
+  }
+}
 module.exports = {
   fetchCommentsByArticleId,
   insertComment,
+  deleteCommentFromDb,
 };

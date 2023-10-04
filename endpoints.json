@@ -87,5 +87,11 @@
         }
       ]
     }
+  },
+
+  " DELETE /api/comments/:comment_id": {
+    "description": "deletes the comment ",
+    "queries": [],
+    "exampleResponse": {}
   }
 }
