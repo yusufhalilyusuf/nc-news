@@ -4,6 +4,7 @@ const { getAllEndpoints } = require("./controllers/api.controller");
 const {
   getArticlesById,
   getArticles,
+  patchArticle,
 } = require("./controllers/articles.controller");
 const { customErrorHandler } = require("./controllers/errors.controller");
 const {
@@ -19,7 +20,7 @@ app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
-
+app.patch("/api/articles/:article_id", patchArticle);
 app.use(customErrorHandler);
 
 app.all("/*", (req, res, next) => {
