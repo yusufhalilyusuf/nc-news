@@ -219,3 +219,56 @@ describe("GET  /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST  /api/articles/:article_id/comments", () => {
+  const validBody = {
+    username: "user1",
+    body: "it was good",
+  };
+  const invalidBody = {
+    user: "user1",
+    body: "it was good",
+  };
+  test("should return 200 status code", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(validBody)
+      .expect(201);
+  });
+  test("should return the posted comment", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(validBody)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toEqual({ comment: "it was good" });
+      });
+  });
+  test("should return 404 status code if article id doesn't exist", () => {
+    return request(app)
+      .post("/api/articles/1000/comments")
+      .send(validBody)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("not found");
+      });
+  });
+  test("should return 400 status code if article id is not a string", () => {
+    return request(app)
+      .post("/api/articles/1000sdf/comments")
+      .send(validBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request");
+      });
+  });
+  test("should return 400 status code body is invalid", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(invalidBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request");
+      });
+  });
+});

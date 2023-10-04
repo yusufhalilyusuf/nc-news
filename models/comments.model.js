@@ -9,8 +9,24 @@ function fetchCommentsByArticleId(article_id) {
     return result.rows;
   });
 }
+
+function insertComment(commentToBeInserted, article_id, username) {
+  if (!username || !article_id) {
+    return Promise.reject({ status: 400, message: "bad request" });
+  }
+  return db
+    .query(`select author from articles where article_id = ${article_id}`)
+    .then((result) => {
+      const author = result.rows[0].author;
+      const queryString = `insert into comments (article_id, body, author)
+    values($1, $2, $3 )returning *;`;
+      return db.query(queryString, [article_id, commentToBeInserted, author]);
+    })
+    .then((res) => {
+      return res.rows[0].body;
+    });
+}
 module.exports = {
   fetchCommentsByArticleId,
+  insertComment,
 };
-
-
