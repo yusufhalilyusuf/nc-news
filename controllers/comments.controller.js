@@ -26,10 +26,9 @@ function postCommentByArticleId(req, res, next) {
 
   fetchArticlesById(article_id)
     .then(() => {
-      return insertComment(body, article_id, username);
+      return insertComment(req.body, body, article_id, username);
     })
     .then((result) => {
-      console.log(result);
       res.status(201).send({ comment: result });
     })
     .catch(next);

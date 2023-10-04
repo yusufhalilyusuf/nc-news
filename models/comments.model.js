@@ -10,12 +10,23 @@ function fetchCommentsByArticleId(article_id) {
   });
 }
 
-function insertComment(commentToBeInserted, article_id, username) {
-  if (!username || !article_id) {
+function insertComment(body, commentToBeInserted, article_id, username) {
+  if (!username || !article_id || Object.keys(body).length != 2) {
     return Promise.reject({ status: 400, message: "bad request" });
   }
   return db
-    .query(`select author from articles where article_id = ${article_id}`)
+    .query("select username from users")
+    .then((result) => {
+      const validUsernames = result.rows.map((x) => x.username);
+      if (!validUsernames.includes(username)) {
+        return Promise.reject({ status: 404, message: "not found" });
+      }
+    })
+    .then(() => {
+      return db.query(
+        `select author from articles where article_id = ${article_id}`
+      );
+    })
     .then((result) => {
       const author = result.rows[0].author;
       const queryString = `insert into comments (article_id, body, author)
