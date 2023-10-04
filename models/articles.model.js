@@ -23,7 +23,6 @@ function fetchArticles(sort_by = "created_at", order = "desc") {
 
 function patchArticleinDb(article_id, vote) {
   const currentVote = 100;
-  console.log(vote);
   const queryString = `update articles set votes= ${
     currentVote + vote
   } where article_id = $1 returning * ;`;
