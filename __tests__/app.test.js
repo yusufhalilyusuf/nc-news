@@ -446,7 +446,7 @@ describe.only("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual(expectedObj)
+        expect(body).toEqual(expectedObj);
       });
   });
 });

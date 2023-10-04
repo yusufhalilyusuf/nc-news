@@ -93,5 +93,19 @@
     "description": "deletes the comment ",
     "queries": [],
     "exampleResponse": {}
+  },
+
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": ["author", "topic", "sort_by", "order"],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
   }
 }
