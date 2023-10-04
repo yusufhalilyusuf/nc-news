@@ -6,12 +6,13 @@ function getCommentsByArticleId(req, res, next) {
   const { article_id } = req.params;
 
   fetchArticlesById(article_id)
-  .then((rows)=>{
-    return fetchCommentsByArticleId(article_id)
-  }).then((result) => {
-    console.log(result);
+    .then((rows) => {
+      return fetchCommentsByArticleId(article_id);
+    })
+    .then((result) => {
       res.status(200).send({ comments: result });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       next(err);
     });
 }

@@ -102,20 +102,21 @@ describe("GET /api/articles/:articleId", () => {
   test("should return expected object", () => {
     const expectedArticle = {
       article_id: 1,
-      title: 'Living in the shadow of a great man',
-      topic: 'mitch',
-      author: 'butter_bridge',
-      body: 'I find this existence challenging',
-      created_at: '2020-07-09T20:11:00.000Z',
+      title: "Living in the shadow of a great man",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "I find this existence challenging",
+      created_at: "2020-07-09T20:11:00.000Z",
       votes: 100,
-      article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
-    }
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
         const article = body.article[0];
-        expect(article).toEqual(expectedArticle)
+        expect(article).toEqual(expectedArticle);
       });
   });
   test("should return 404 status code if article id doesn't exist in db", () => {
@@ -213,9 +214,8 @@ describe("GET  /api/articles/:article_id/comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
-      .then(({body})=>{
-        console.log(body);
-        expect(body).toEqual({ comments: [] })
-      })
+      .then(({ body }) => {
+        expect(body).toEqual({ comments: [] });
+      });
   });
 });

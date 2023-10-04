@@ -6,20 +6,11 @@ function fetchCommentsByArticleId(article_id) {
   }
   const queryString = `SELECT * FROM comments WHERE article_id=$1 order by created_at desc`;
   return db.query(queryString, [article_id]).then((result) => {
-      return result.rows;
+    return result.rows;
   });
 }
 module.exports = {
   fetchCommentsByArticleId,
 };
 
-// function getArticleIdsWithComments() {
-//     return db.query("select  array_agg (DISTINCT article_id) from comments").then((res) => {
-//       return res.rows[0].array_agg;
-//     });
-// }
-// function getArticleIds() {
-//     return db.query("select array_agg (article_id) from articles").then((res) => {
-//       return res.rows[0].array_agg;
-//     });
-// }
+
