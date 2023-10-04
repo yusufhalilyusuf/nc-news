@@ -15,14 +15,13 @@ function fetchArticlesById(article_id) {
 }
 
 function fetchArticles(sort_by = "created_at", order = "desc") {
-    const queryString = `SELECT articles.author, title, article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.body) AS comment_count FROM articles LEFT JOIN comments USING (article_id) GROUP BY article_id ORDER by ${sort_by} ${order}`;
-    return db.query(queryString).then((result) => {
-      return result.rows;
-    });
-  }
-
+  const queryString = `SELECT articles.author, title, article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.body) AS comment_count FROM articles LEFT JOIN comments USING (article_id) GROUP BY article_id ORDER by ${sort_by} ${order}`;
+  return db.query(queryString).then((result) => {
+    return result.rows;
+  });
+}
 
 module.exports = {
   fetchArticlesById,
-  fetchArticles
+  fetchArticles,
 };
