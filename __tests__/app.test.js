@@ -407,6 +407,14 @@ describe("DELETE  /api/comments/:comment_id", () => {
         expect(body.message).toBe("comment id not found");
       });
   });
+  test("should return 400 status code if comment id is not a string", () => {
+    return request(app)
+      .delete("/api/comments/hola")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request, comment id should be a number");
+      });
+  });
 });
 
 describe.only("GET /api/users", () => {
