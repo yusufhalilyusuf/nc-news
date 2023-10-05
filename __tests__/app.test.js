@@ -417,7 +417,7 @@ describe("DELETE  /api/comments/:comment_id", () => {
   });
 });
 
-describe.only("GET /api/users", () => {
+describe("GET /api/users", () => {
   test("should return 200 status code", () => {
     return request(app).get("/api/users").expect(200);
   });
@@ -455,6 +455,59 @@ describe.only("GET /api/users", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body).toEqual(expectedObj);
+      });
+  });
+});
+
+describe("GET /api/articles?query", () => {
+  test("should return 200 status code and correct article", () => {
+    const expectedArticle = {
+      articles: [
+        {
+          author: "rogersop",
+          title: "UNCOVERED: catspiracy to bring down democracy",
+          article_id: 5,
+          topic: "cats",
+          created_at: "2020-08-03T13:14:00.000Z",
+          votes: 0,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          comment_count: "2",
+        },
+      ],
+    };
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(expectedArticle);
+      });
+  });
+  test("should return multiple articles if there are articles with the same topic", () => {
+    const expectedArticlesLength = 12;
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(expectedArticlesLength);
+      });
+  });
+  test("should return 404 if topic name doesn't exist in database", () => {
+    const expectedArticlesLength = 12;
+    return request(app)
+      .get("/api/articles?topic=somethingNotInDb")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("not found, topic doesn't exist");
+      });
+  });
+  test("should return 200 if topic name exists but no articles related to the topic", () => {
+    const expectedArticle = { articles: [] };
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(expectedArticle);
       });
   });
 });

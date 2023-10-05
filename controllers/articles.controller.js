@@ -3,6 +3,7 @@ const {
   fetchArticles,
   patchArticleinDb,
 } = require("../models/articles.model");
+const { fetchTopics } = require("../models/topics.model");
 
 function getArticlesById(req, res, next) {
   const { article_id } = req.params;
@@ -15,9 +16,12 @@ function getArticlesById(req, res, next) {
     });
 }
 function getArticles(req, res, next) {
-  fetchArticles().then((result) => {
-    res.status(200).send({ articles: result });
-  });
+  const { topic } = req.query;
+  fetchArticles(topic)
+    .then((result) => {
+      res.status(200).send({ articles: result });
+    })
+    .catch(next);
 }
 
 function patchArticle(req, res, next) {
