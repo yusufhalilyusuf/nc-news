@@ -2,6 +2,7 @@ const { fetchArticlesById } = require("../models/articles.model");
 const {
   fetchCommentsByArticleId,
   insertComment,
+  deleteCommentFromDb,
 } = require("../models/comments.model");
 const { getArticlesById } = require("./articles.controller");
 
@@ -34,7 +35,17 @@ function postCommentByArticleId(req, res, next) {
     .catch(next);
 }
 
+function deleteComment(req, res, next) {
+  const { comment_id } = req.params;
+  deleteCommentFromDb(comment_id)
+    .then((result) => {
+      res.status(204).send();
+    })
+    .catch(next);
+}
+
 module.exports = {
   getCommentsByArticleId,
   postCommentByArticleId,
+  deleteComment,
 };
