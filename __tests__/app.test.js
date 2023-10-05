@@ -294,7 +294,7 @@ describe("POST  /api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only("PATCH  /api/articles/:article_id", () => {
+describe("PATCH  /api/articles/:article_id", () => {
   const positiveValidObject = { inc_votes: 5 };
   const negativeValidObject = { inc_votes: -5 };
   const invalidObject1 = { inc_votes: "hola" };
