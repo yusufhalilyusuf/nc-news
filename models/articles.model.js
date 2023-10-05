@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { fetchTopics } = require("./topics.model");
 
 function fetchArticlesById(article_id) {
   if (isNaN(article_id)) {
@@ -36,3 +37,18 @@ module.exports = {
   fetchArticles,
   patchArticleinDb,
 };
+
+// if(topic){
+//   fetchTopics().then((topics)=>{
+//   const existingTopics = topics.map(x=>x.slug)
+//   console.log(existingTopics);
+//   if(!existingTopics.includes(topic)) {
+//     console.log('here');
+//     return Promise.reject({status:404, message: 'not found'})
+//   }else{
+// queryString+=` HAVING topic=$1 ORDER by ${sort_by} ${order}`
+// console.log('hi');
+// return db.query(queryString,[topic]).then((result) => {
+//   console.log(result.rows);
+// return result.rows;
+// });

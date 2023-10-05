@@ -15,9 +15,11 @@ function getArticlesById(req, res, next) {
     });
 }
 function getArticles(req, res, next) {
-  fetchArticles().then((result) => {
+  const {topic} = req.query;
+  console.log(topic);
+  fetchArticles(topic).then((result) => {
     res.status(200).send({ articles: result });
-  });
+  }).catch(next)
 }
 
 function patchArticle(req, res, next) {

@@ -409,7 +409,7 @@ describe("DELETE  /api/comments/:comment_id", () => {
   });
 });
 
-describe.only("GET /api/users", () => {
+describe("GET /api/users", () => {
   test("should return 200 status code", () => {
     return request(app).get("/api/users").expect(200);
   });
@@ -450,3 +450,9 @@ describe.only("GET /api/users", () => {
       });
   });
 });
+
+// describe.only("GET /api/articles?query", () => {
+//   test("should return 200 status code", () => {
+//     return request(app).get("/api/articles?topic=mitch").expect(200);
+//   });
+// });
