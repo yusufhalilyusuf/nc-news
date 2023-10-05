@@ -9,7 +9,8 @@
     "seed-prod": "NODE_ENV=production node ./db/seeds/run-seed.js",
     "test": "jest",
     "prepare": "husky install",
-    "playground": "psql -f playground.sql > playground.txt"
+    "playground": "psql -f playground.sql > playground.txt",
+    "start": "node listen.js"
   },
   "repository": {
     "type": "git",
