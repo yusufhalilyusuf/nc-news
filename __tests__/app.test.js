@@ -88,7 +88,7 @@ describe("GET /api/articles/:articleId", () => {
       .expect(200)
       .then(({ body }) => {
         const article = body.article[0];
-        expect(Object.keys(article).length).toBe(8);
+        expect(Object.keys(article).length).toBe(9);
         expect(article).toHaveProperty("article_id");
         expect(article).toHaveProperty("title");
         expect(article).toHaveProperty("topic");
@@ -97,6 +97,7 @@ describe("GET /api/articles/:articleId", () => {
         expect(article).toHaveProperty("created_at");
         expect(article).toHaveProperty("votes");
         expect(article).toHaveProperty("article_img_url");
+        expect(article).toHaveProperty("comment_count");
       });
   });
   test("should return expected object", () => {
@@ -110,6 +111,7 @@ describe("GET /api/articles/:articleId", () => {
       votes: 100,
       article_img_url:
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      comment_count: 11,
     };
     return request(app)
       .get("/api/articles/1")
