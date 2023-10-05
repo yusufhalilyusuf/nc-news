@@ -293,3 +293,110 @@ describe("POST  /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe.only("PATCH  /api/articles/:article_id", () => {
+  const positiveValidObject = { inc_votes: 5 };
+  const negativeValidObject = { inc_votes: -5 };
+  const invalidObject1 = { inc_votes: "hola" };
+  const invalidObject2 = { incvotes: 5 };
+  const invalidObject3 = { inc_votes: "hola", smt: "smt" };
+  test("should return 200 status code and the updated article if there is a positive increment ", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send(positiveValidObject)
+      .expect(200)
+      .then(({ body }) => {
+        const expectedObject = {
+          updated_article: [
+            {
+              article_id: 1,
+              title: "Living in the shadow of a great man",
+              topic: "mitch",
+              author: "butter_bridge",
+              body: "I find this existence challenging",
+              created_at: "2020-07-09T20:11:00.000Z",
+              votes: 105,
+              article_img_url:
+                "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            },
+          ],
+        };
+        console.log(body);
+        expect(body).toEqual(expectedObject);
+      });
+  });
+  test("should return 200 status code and the updated article if there is a negative increment ", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send(negativeValidObject)
+      .expect(200)
+      .then(({ body }) => {
+        const expectedObject = {
+          updated_article: [
+            {
+              article_id: 1,
+              title: "Living in the shadow of a great man",
+              topic: "mitch",
+              author: "butter_bridge",
+              body: "I find this existence challenging",
+              created_at: "2020-07-09T20:11:00.000Z",
+              votes: 95,
+              article_img_url:
+                "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            },
+          ],
+        };
+        expect(body).toEqual(expectedObject);
+      });
+  });
+  test("should return 404 status code if article id doesn't exist ", () => {
+    return request(app)
+      .patch("/api/articles/1333")
+      .send(negativeValidObject)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("not found");
+      });
+  });
+  test("should return 400 status code if article id is not a number ", () => {
+    return request(app)
+      .patch("/api/articles/1333a")
+      .send(negativeValidObject)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request");
+      });
+  });
+  test("should return 400 status code if the body doesn't have inc_votes property", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send(invalidObject2)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request, inc_votes required");
+      });
+  });
+  test("should return 400 status code if the body some other properties", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send(invalidObject3)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request, inc_votes required only");
+      });
+  });
+  test("should return 400 status code if inc_body is not a number", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send(invalidObject1)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request, inc_votes should be a number");
+      });
+  });
+  // test("should return 200 status code and the updated article ", () => {
+  //   return request(app)
+  //   .patch("/api/articles/1")
+  //   .expect(200);
+  // })
+});
