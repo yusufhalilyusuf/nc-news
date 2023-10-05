@@ -489,7 +489,6 @@ describe("GET /api/articles?query", () => {
       .get("/api/articles?topic=mitch")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body.articles.length).toBe(expectedArticlesLength);
       });
   });
@@ -499,7 +498,6 @@ describe("GET /api/articles?query", () => {
       .get("/api/articles?topic=somethingNotInDb")
       .expect(404)
       .then(({ body }) => {
-        console.log(body);
         expect(body.message).toBe("not found, topic doesn't exist");
       });
   });
@@ -509,7 +507,6 @@ describe("GET /api/articles?query", () => {
       .get("/api/articles?topic=paper")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body).toEqual(expectedArticle);
       });
   });
