@@ -42,7 +42,10 @@ function insertComment(body, commentToBeInserted, article_id, username) {
 
 function deleteCommentFromDb(comment_id) {
   if (isNaN(comment_id)) {
-    return Promise.reject({ status: 400, message: "bad request" });
+    return Promise.reject({
+      status: 400,
+      message: "bad request, comment id should be a number",
+    });
   } else {
     return db
       .query(`select comment_id from comments`)
