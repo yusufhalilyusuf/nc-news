@@ -48,9 +48,7 @@ function deleteCommentFromDb(comment_id) {
       .query(`select comment_id from comments`)
       .then((comment_ids) => {
         const currentComments = comment_ids.rows.map((x) => x.comment_id);
-        console.log(currentComments);
         if (!currentComments.includes(+comment_id)) {
-          console.log("here");
           return Promise.reject({
             status: 404,
             message: "comment id not found",
@@ -59,7 +57,6 @@ function deleteCommentFromDb(comment_id) {
       })
       .then(() => {
         const queryString = `delete from comments where comment_id=$1`;
-        console.log(queryString);
         return db.query(queryString, [comment_id]);
       });
   }
