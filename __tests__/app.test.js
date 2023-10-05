@@ -321,7 +321,6 @@ describe("PATCH  /api/articles/:article_id", () => {
             },
           ],
         };
-        console.log(body);
         expect(body).toEqual(expectedObject);
       });
   });
