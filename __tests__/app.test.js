@@ -107,7 +107,7 @@ describe("GET /api/articles/:articleId", () => {
       topic: "mitch",
       author: "butter_bridge",
       body: "I find this existence challenging",
-      created_at: "2020-07-09T20:11:00.000Z",
+      created_at: "2020-07-09T21:11:00.000Z",
       votes: 100,
       article_img_url:
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -348,7 +348,7 @@ describe("PATCH  /api/articles/:article_id", () => {
               topic: "mitch",
               author: "butter_bridge",
               body: "I find this existence challenging",
-              created_at: "2020-07-09T20:11:00.000Z",
+              created_at: "2020-07-09T21:11:00.000Z",
               votes: 105,
               article_img_url:
                 "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -372,7 +372,7 @@ describe("PATCH  /api/articles/:article_id", () => {
               topic: "mitch",
               author: "butter_bridge",
               body: "I find this existence challenging",
-              created_at: "2020-07-09T20:11:00.000Z",
+              created_at: "2020-07-09T21:11:00.000Z",
               votes: 95,
               article_img_url:
                 "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -502,7 +502,7 @@ describe("GET /api/articles?query", () => {
           title: "UNCOVERED: catspiracy to bring down democracy",
           article_id: 5,
           topic: "cats",
-          created_at: "2020-08-03T13:14:00.000Z",
+          created_at: "2020-08-03T14:14:00.000Z",
           votes: 0,
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
