@@ -42,9 +42,6 @@
       "jest-extended/all",
       "jest-sorted"
     ]
-  },
-    "engines": {
-      "node": ">=14.16.0"
-    }
+  }
   
 }
