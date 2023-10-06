@@ -45,11 +45,11 @@ jobs:
         run: npm ci
 
       - name: Setup postgres
-        uses: harmon758/postgresql-action@v1
+        uses: ikalnytskyi/action-setup-postgres@v4
         with:
-          postgresql db: nc_news_test
-          postgres user: user
-          postgres password: pass
+          database: nc_news_test
+          username: user
+          password: pass
 
       - name: Run tests
         run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm t
