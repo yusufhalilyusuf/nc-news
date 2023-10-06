@@ -17,6 +17,8 @@ function fetchArticlesById(article_id) {
 
 function fetchArticles(topic = "", sort_by = "created_at", order = "desc") {
   const existingTopics = [];
+  const allowedOrders = ["asc", "desc"];
+
   let stringQuery = `SELECT articles.author, title, article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.body) AS comment_count FROM articles LEFT JOIN comments USING (article_id) GROUP BY article_id`;
   return fetchTopics()
     .then((topics) => {
@@ -34,7 +36,23 @@ function fetchArticles(topic = "", sort_by = "created_at", order = "desc") {
       }
     })
     .then(() => {
+      return getArticleColumns();
+    })
+    .then((allowedSorts) => {
+      if (!allowedSorts.includes(sort_by)) {
+        return Promise.reject({
+          status: 400,
+          message: "bad request, invalid sort parameter",
+        });
+      } else if (!allowedOrders.includes(order)) {
+        return Promise.reject({
+          status: 400,
+          message: "bad request, invalid order parameter",
+        });
+      }
       stringQuery += ` ORDER by ${sort_by} ${order}`;
+    })
+    .then(() => {
       return db.query(stringQuery);
     })
     .then((result) => {
@@ -58,17 +76,16 @@ module.exports = {
   patchArticleinDb,
 };
 
-// if(topic){
-//   fetchTopics().then((topics)=>{
-//   const existingTopics = topics.map(x=>x.slug)
-//   console.log(existingTopics);
-//   if(!existingTopics.includes(topic)) {
-//     console.log('here');
-//     return Promise.reject({status:404, message: 'not found'})
-//   }else{
-// queryString+=` HAVING topic=$1 ORDER by ${sort_by} ${order}`
-// console.log('hi');
-// return db.query(queryString,[topic]).then((result) => {
-//   console.log(result.rows);
-// return result.rows;
-// });
+function getArticleColumns() {
+  const allowedSorts = [];
+  return db
+    .query(
+      `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='articles'`
+    )
+    .then((result) => {
+      result.rows.forEach((x) => {
+        allowedSorts.push(x.column_name);
+      });
+      return allowedSorts;
+    });
+}
