@@ -42,5 +42,10 @@
       "jest-extended/all",
       "jest-sorted"
     ]
-  }
+  },
+    "engines": {
+      "node": ">=14.17.0",
+      "p"
+    }
+  
 }

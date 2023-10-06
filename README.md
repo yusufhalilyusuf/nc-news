@@ -3,6 +3,8 @@ In this project, you can access a database and send requests to see relevant dat
 
 
 # How to run locally  
+(Minimum version of node = 14.17.0)  
+(Minimum version of Postgres = 14.12.0)
 
 - clone this repo  
 $ git clone https://github.com/yusufhalilyusuf/nc-news  
