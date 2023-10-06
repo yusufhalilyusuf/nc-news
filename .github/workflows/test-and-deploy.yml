@@ -22,11 +22,11 @@
 
 name: Test and Deploy
 
-on: 
+on:
   push:
     branches:
       - 14-readme
-      
+
 jobs:
   hello:
     name: say smt
@@ -34,10 +34,25 @@ jobs:
     steps:
       - name: Hello world
         run: echo 'hello world'
+  test:
+    name: run app tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
 
+      - name: install dependencies
+        run: npm ci
 
+      - name: Setup postgres
+      - uses: harmon758/postgresql-action@v1
+        with:
+          postgresql db: nc_news_ci
+          postgres user: user
+          postgres password: pass # See https://hub.docker.com/_/postgres for available versions
 
-
+      - name: Run tests
+        run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm t
 
   # Explore-GitHub-Actions:
   #   runs-on: ubuntu-latest
@@ -53,4 +68,3 @@ jobs:
   #       run: |
   #         ls ${{ github.workspace }}
   #     - run: echo "🍏 This job's status is ${{ job.status }}."
-
