@@ -3,6 +3,7 @@ const {
   fetchCommentsByArticleId,
   insertComment,
   deleteCommentFromDb,
+  patchCommentInDb,
 } = require("../models/comments.model");
 const { getArticlesById } = require("./articles.controller");
 
@@ -44,8 +45,23 @@ function deleteComment(req, res, next) {
     .catch(next);
 }
 
+function patchCommentbyCommentId(req, res, next) {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+
+  if (Object.keys(req.body).length != 1) {
+    return next({ status: 400, message: "inc_votes required only" });
+  }
+  patchCommentInDb(comment_id, inc_votes)
+    .then((result) => {
+      res.status(200).send({ comment: result });
+    })
+    .catch(next);
+}
+
 module.exports = {
   getCommentsByArticleId,
   postCommentByArticleId,
   deleteComment,
+  patchCommentbyCommentId,
 };

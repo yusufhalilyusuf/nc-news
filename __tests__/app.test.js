@@ -574,3 +574,72 @@ describe("GET /users/:username", () => {
       });
   });
 });
+
+describe("tests for PATCH /api/comments/:comment_id", () => {
+  test("should return 200 status code and updated comment if positive increment", () => {
+    const expected = {
+      comment: [
+        {
+          comment_id: 3,
+          body: "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.",
+          article_id: 1,
+          author: "icellusedkars",
+          votes: 110,
+          created_at: "2020-03-01T01:13:00.000Z",
+        },
+      ],
+    };
+    return request(app)
+      .patch("/api/comments/3")
+      .send({ inc_votes: 10 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(expected);
+      });
+  });
+  test("should return 200 status code and updated comment if negative increment", () => {
+    const expected = {
+      comment: [
+        {
+          comment_id: 3,
+          body: "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.",
+          article_id: 1,
+          author: "icellusedkars",
+          votes: 90,
+          created_at: "2020-03-01T01:13:00.000Z",
+        },
+      ],
+    };
+    return request(app)
+      .patch("/api/comments/3")
+      .send({ inc_votes: -10 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(expected);
+      });
+  });
+  test("should return 404 status code if comment id doesn't exist", () => {
+    return request(app)
+      .patch("/api/comments/387878")
+      .send({ inc_votes: -10 })
+      .expect(404);
+  });
+  test("should return 400 status code if comment id is not a number", () => {
+    return request(app)
+      .patch("/api/comments/387878something")
+      .send({ inc_votes: -10 })
+      .expect(400);
+  });
+  test("should return 400 status code if there are other properties in patch object", () => {
+    return request(app)
+      .patch("/api/comments/3")
+      .send({ inc_votes: -10, smtElse: "something" })
+      .expect(400);
+  });
+  test("should return 400 status code if inc_vote value is not a number", () => {
+    return request(app)
+      .patch("/api/comments/3")
+      .send({ inc_votes: '1hola' })
+      .expect(400);
+  });
+});

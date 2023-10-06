@@ -64,8 +64,35 @@ function deleteCommentFromDb(comment_id) {
       });
   }
 }
+function patchCommentInDb(comment_id,inc_votes){
+if(isNaN(comment_id)){
+  return Promise.reject({status:400, message:'comment id should be a number'})
+}if(typeof inc_votes==='string'){
+  return Promise.reject({status:400, message: 'inc_votes should be a number'})
+}
+
+const query = `select * from comments where comment_id=$1`;
+return db.query(query,[comment_id]).then(result=>{
+  if(result.rowCount===0){
+    return Promise.reject({status:404, message:'comment id not found'})
+  }
+}).then(()=>{
+  const currentVote = 100;
+  const query = `update comments set votes=(select votes from comments where comment_id=${comment_id}) + ${inc_votes} where comment_id=${comment_id} returning *`
+  // const query1 = `update comments set votes=(select votes from comments where comment_id=$1) + $2} where comment_id=$3 returning *`
+
+return db.query(query)
+
+}).then(result=>{
+  return result.rows
+})
+}
+
+
 module.exports = {
   fetchCommentsByArticleId,
   insertComment,
   deleteCommentFromDb,
+  patchCommentInDb
+
 };
