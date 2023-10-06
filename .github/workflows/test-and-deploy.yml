@@ -49,7 +49,7 @@ jobs:
         with:
           postgresql db: nc_news_ci
           postgres user: user
-          postgres password: pass # See https://hub.docker.com/_/postgres for available versions
+          postgres password: pass
 
       - name: Run tests
         run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm t
