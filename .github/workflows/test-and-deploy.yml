@@ -52,7 +52,7 @@ jobs:
           postgres password: pass
 
       - name: Run tests
-        run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm 
+        run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm t
 
   deploy:
     name: Deploy to render
