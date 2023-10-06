@@ -25,7 +25,7 @@ name: Test and Deploy
 on:
   push:
     branches:
-      - main
+      - test
 
 jobs:
   hello:
@@ -47,9 +47,9 @@ jobs:
       - name: Setup postgres
         uses: ikalnytskyi/action-setup-postgres@v4
         with:
-          database: nc_news_test
-          username: user
-          password: pass
+          postgresql db: nc_news_test
+          postgresql user: user
+          postgresql password: pass
 
       - name: Run tests
         run: PGDATABASE=nc_news_test PGUSER=user PGPASSWORD=pass npm t
