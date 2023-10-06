@@ -1,24 +1,3 @@
-# naem: Paul
-# age: 7
-# hobbies:
-#     - coding
-#     - nerd
-# nested:
-#   nestedKey:1
-#   moreNested:
-#      really: true
-
-#     # {
-#     #   "name":"Paul",
-#     #   "age": "7",
-#     #   "hobbies":["coding","nerd"],
-#     #   "nested":{
-#     #     "nestedKey":1,
-#     #     "moreNested":{
-#     #       "really":true
-#     #     }
-#     #   }
-#     # }
 
 name: Test and Deploy
 
