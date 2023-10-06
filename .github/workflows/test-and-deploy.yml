@@ -47,7 +47,7 @@ jobs:
       - name: Setup postgres
         uses: harmon758/postgresql-action@v1
         with:
-          postgresql db: nc_news_ci
+          postgresql db: nc_news_test
           postgres user: user
           postgres password: pass
 
