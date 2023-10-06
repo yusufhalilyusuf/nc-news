@@ -1,0 +1,65 @@
+# naem: Paul
+# age: 7
+# hobbies:
+#     - coding
+#     - nerd
+# nested:
+#   nestedKey:1
+#   moreNested:
+#      really: true
+
+#     # {
+#     #   "name":"Paul",
+#     #   "age": "7",
+#     #   "hobbies":["coding","nerd"],
+#     #   "nested":{
+#     #     "nestedKey":1,
+#     #     "moreNested":{
+#     #       "really":true
+#     #     }
+#     #   }
+#     # }
+
+name: Test and Deploy
+
+on:
+  push:
+    branches:
+      - 14-readme
+
+jobs:
+  hello:
+    name: say smt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello world
+        run: echo 'hello world'
+  test:
+    name: run app tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: Setup postgres
+        uses: ikalnytskyi/action-setup-postgres@v4
+        with:
+          database: nc_news_test
+          username: user
+          password: pass
+
+      - name: Run tests
+        run: PGDATABASE=nc_news_test PGUSER=user PGPASSWORD=pass npm t
+
+  deploy:
+    name: Deploy to render
+    runs-on: ubuntu-latest
+    needs: test  
+    steps:
+      - name: deploy to render
+        run: curl ${{secrets.RENDERSECRET}}
+
+  
