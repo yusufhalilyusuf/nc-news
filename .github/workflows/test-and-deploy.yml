@@ -24,6 +24,9 @@ jobs:
 
       - name: Setup PostgreSQL
       - uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: '11'
+          
 
 
   #     - name: Run tests
