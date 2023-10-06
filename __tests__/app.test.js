@@ -168,6 +168,38 @@ describe("GET /api/articles", () => {
         expect(body.articles).toBeSortedBy("created_at", { descending: true });
       });
   });
+  test("should return results sorted article id in descending order if sort_by is article_id", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("article_id", { descending: true });
+      });
+  });
+  test("should return results sorted article id in ascending order if sort_by is article_id and order is asc", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("article_id", { descending: false });
+      });
+  });
+  test("should return 400 if sort_by param is invalid", () => {
+    return request(app)
+      .get("/api/articles?sort_by=something1&order=asc")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request, invalid sort parameter");
+      });
+  });
+  test("should return 400 if order param is invalid", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=ascdescboth")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("bad request, invalid order parameter");
+      });
+  });
 });
 describe("GET  /api/articles/:article_id/comments", () => {
   test("should return 200 status code", () => {

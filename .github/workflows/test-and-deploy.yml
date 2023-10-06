@@ -25,7 +25,7 @@ name: Test and Deploy
 on:
   push:
     branches:
-      - 14-readme
+      - main
 
 jobs:
   hello:
