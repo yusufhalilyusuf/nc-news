@@ -1,3 +1,25 @@
+# naem: Paul
+# age: 7
+# hobbies:
+#     - coding
+#     - nerd
+# nested:
+#   nestedKey:1
+#   moreNested:
+#      really: true
+
+#     # {
+#     #   "name":"Paul",
+#     #   "age": "7",
+#     #   "hobbies":["coding","nerd"],
+#     #   "nested":{
+#     #     "nestedKey":1,
+#     #     "moreNested":{
+#     #       "really":true
+#     #     }
+#     #   }
+#     # }
+
 name: Test and Deploy
 
 on:
@@ -22,20 +44,20 @@ jobs:
       - name: install dependencies
         run: npm ci
 
-      - name: Setup PostgreSQL
-      - uses: harmon758/postgresql-action@v1
+      - name: Setup postgres
+         uses: harmon758/postgresql-action@v1
         with:
-          postgresql version: '11'
-          
+          postgresql db: nc_news_ci
+          postgres user: user
+          postgres password: pass
 
-
-  #     - name: Run tests
-  #       run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm 
-  # deploy: Deploy to render
-  # runs-on: ubuntu-latest
-  # needs: test  
-  # steps:
-  #   - name: deploy to render
-  #     run: curl ${{secrets.RENDERSECRET}}
+      - name: Run tests
+        run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm 
+  deploy: Deploy to render
+  runs-on: ubuntu-latest
+  needs: test  
+  steps:
+    - name: deploy to render
+      run: curl ${{secrets.RENDERSECRET}}
 
   
