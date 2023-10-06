@@ -22,7 +22,7 @@ jobs:
       - name: install dependencies
         run: npm ci
 
-      - name: Setup postgres
+      - name: Setup PostgreSQL
       - uses: harmon758/postgresql-action@v1
         with:
           postgresql db: nc_news_ci
