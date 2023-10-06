@@ -45,7 +45,7 @@ jobs:
         run: npm ci
 
       - name: Setup postgres
-         uses: harmon758/postgresql-action@v1
+        uses: harmon758/postgresql-action@v1
         with:
           postgresql db: nc_news_ci
           postgres user: user
