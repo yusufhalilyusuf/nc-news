@@ -44,12 +44,12 @@ jobs:
       - name: install dependencies
         run: npm ci
 
-      - name: Setup postgres
-      - uses: harmon758/postgresql-action@v1
-        with:
-          postgresql db: nc_news_ci
-          postgres user: user
-          postgres password: pass
+      # - name: Setup postgres
+      # - uses: harmon758/postgresql-action@v1
+      #   with:
+      #     postgresql db: nc_news_ci
+      #     postgres user: user
+      #     postgres password: pass
 
       - name: Run tests
         run: PGDATABASE=nc_news_ci PGUSER=user PGPASSWORD=pass npm t
