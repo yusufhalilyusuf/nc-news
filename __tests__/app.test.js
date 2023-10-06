@@ -545,3 +545,32 @@ describe("GET /api/articles?query", () => {
       });
   });
 });
+
+describe("GET /users/:username", () => {
+  test("should return 200 status code", () => {
+    const expectedUser = {
+      user: [
+        {
+          username: "lurker",
+          name: "do_nothing",
+          avatar_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+        },
+      ],
+    };
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(expectedUser);
+      });
+  });
+  test("should return 404 status code", () => {
+    return request(app)
+      .get("/api/users/lurker1")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("user not found");
+      });
+  });
+});

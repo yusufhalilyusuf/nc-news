@@ -6,6 +6,15 @@ function fetchUsers() {
   });
 }
 
+function fetchUsersByName(username) {
+  return fetchUsers().then((result) => {
+    return result.filter((x) => {
+      return x.username === username;
+    });
+  });
+}
+
 module.exports = {
   fetchUsers,
+  fetchUsersByName,
 };
