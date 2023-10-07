@@ -15,6 +15,8 @@ function psqlErrorHandler(err, req, res, next) {
       res.status(400).send({ message: "limit is wrong" });
     } else if (err.code == 42703) {
       res.status(400).send({ message: "page is wrong" });
+    } else if (err.code === '22P02') {
+      res.status(400).send({ message: "limit is wrong" });
     } else console.log(err);
   }
 }

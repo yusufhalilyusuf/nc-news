@@ -247,11 +247,11 @@ describe("GET /api/articles", () => {
       .expect(200);
   });
 });
-describe.only("GET  /api/articles/:article_id/comments", () => {
+describe("GET  /api/articles/:article_id/comments", () => {
   test("should return 200 status code", () => {
-    return request(app).get("/api/articles/1/comments?page=1").expect(200)
+    return request(app).get("/api/articles/1/comments?page=1").expect(200);
   });
-  test.only("should return an object with all expected properties", () => {
+  test("should return an object with all expected properties", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -281,6 +281,40 @@ describe.only("GET  /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.comments.length).toBe(10);
+      });
+  });
+  test("should return 5 results if limit is 5", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBe(5);
+      });
+  });
+  test("should return 5 results if starting from 8 if limit is 5 and page is 2", () => {
+    return request(app)
+      .get(
+        "/api/articles/1/comments?sort_by=comment_id&order=asc&limit=5&page=2"
+      )
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments[0].comment_id).toBe(8);
+      });
+  });
+  test("should return 400 if limit is not a number", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=5s")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("limit is wrong");
+      });
+  });
+  test("should return 400 if page is not a number", () => {
+    return request(app)
+      .get("/api/articles/1/comments?page=5ssdsdf")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("limit is wrong");
       });
   });
   test("should return 404 status code if article id doesn't exist in db", () => {
