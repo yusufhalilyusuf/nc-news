@@ -1,12 +1,24 @@
 const db = require("../db/connection");
 const { articleData } = require("../db/data/test-data");
 
-function fetchCommentsByArticleId(article_id) {
+function fetchCommentsByArticleId(article_id,limit=10,page='') {
+  const arrayToPass=[]
+  let queryString = `SELECT * FROM comments WHERE article_id=$1 order by created_at desc limit $2`;
+
   if (isNaN(article_id)) {
     return Promise.reject({ status: 400, message: "bad request" });
   } else {
-    const queryString = `SELECT * FROM comments WHERE article_id=$1 order by created_at desc`;
-    return db.query(queryString, [article_id]).then((result) => {
+   
+    arrayToPass.push(article_id)
+    arrayToPass.push(limit)
+    if(page){
+      arrayToPass.push(page)
+      console.log((page-1)*10);
+      console.log('here');
+      queryString+=` offset ($3-1)*$2`
+      console.log(queryString);
+    }
+    return db.query(queryString, arrayToPass).then((result) => {
       return result.rows;
     });
   }

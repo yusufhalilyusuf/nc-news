@@ -9,10 +9,10 @@ const { getArticlesById } = require("./articles.controller");
 
 function getCommentsByArticleId(req, res, next) {
   const { article_id } = req.params;
-
+  const {limit,page} = req.query;
   fetchArticlesById(article_id)
     .then((rows) => {
-      return fetchCommentsByArticleId(article_id);
+      return fetchCommentsByArticleId(article_id,limit,page);
     })
     .then((result) => {
       res.status(200).send({ comments: result });

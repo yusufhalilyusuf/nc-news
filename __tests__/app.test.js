@@ -247,15 +247,16 @@ describe("GET /api/articles", () => {
       .expect(200);
   });
 });
-describe("GET  /api/articles/:article_id/comments", () => {
+describe.only("GET  /api/articles/:article_id/comments", () => {
   test("should return 200 status code", () => {
-    return request(app).get("/api/articles/1/comments").expect(200);
+    return request(app).get("/api/articles/1/comments?page=1").expect(200)
   });
-  test("should return an object with all expected properties", () => {
+  test.only("should return an object with all expected properties", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
       .then(({ body }) => {
+        console.log(body);
         body.comments.forEach((comment) => {
           expect(comment).toHaveProperty("comment_id");
           expect(comment).toHaveProperty("votes");
@@ -272,6 +273,14 @@ describe("GET  /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("should return 10 results if limit is 10", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=10")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBe(10);
       });
   });
   test("should return 404 status code if article id doesn't exist in db", () => {
