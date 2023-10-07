@@ -200,6 +200,52 @@ describe("GET /api/articles", () => {
         expect(body.message).toBe("bad request, invalid order parameter");
       });
   });
+  test("should return 10 articles only if no limit provided", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(10);
+      });
+  });
+  test("should return 5 articles only if  limit is 5", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc&limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(5);
+      });
+  });
+  test("should return 5 articles starting from 6 if limit is 5 and page is 2", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc&limit=5&page=2")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles[0].article_id).toBe(6);
+      });
+  });
+  test("should return 400 if limit is not a number", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc&limit=5s&page=1")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("limit is wrong");
+      });
+  });
+  test("should return 400 if page is not a number", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc&limit=5&page=1something")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("page is wrong");
+      });
+  });
+
+  test("should return 200 if there is nothing to show in requested page", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc&limit=5&page=16")
+      .expect(200);
+  });
 });
 describe("GET  /api/articles/:article_id/comments", () => {
   test("should return 200 status code", () => {
@@ -507,6 +553,7 @@ describe("GET /api/articles?query", () => {
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
           comment_count: "2",
+          total_count: 13,
         },
       ],
     };
@@ -520,7 +567,7 @@ describe("GET /api/articles?query", () => {
   test("should return multiple articles if there are articles with the same topic", () => {
     const expectedArticlesLength = 12;
     return request(app)
-      .get("/api/articles?topic=mitch")
+      .get("/api/articles?topic=mitch&limit=20")
       .expect(200)
       .then(({ body }) => {
         expect(body.articles.length).toBe(expectedArticlesLength);
@@ -659,7 +706,6 @@ describe("tests for POST /api/articles", () => {
       .send(articleToPost)
       .expect(201)
       .then(({ body }) => {
-        console.log(body);
         const newArticle = body.article[0];
         expect(newArticle).toHaveProperty("article_id");
         expect(newArticle).toHaveProperty("title");

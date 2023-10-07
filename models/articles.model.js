@@ -15,11 +15,17 @@ function fetchArticlesById(article_id) {
   });
 }
 
-function fetchArticles(topic = "", sort_by = "created_at", order = "desc") {
+function fetchArticles(
+  topic = "",
+  sort_by = "created_at",
+  order = "desc",
+  limit = 10,
+  page = ""
+) {
   const existingTopics = [];
   const allowedOrders = ["asc", "desc"];
 
-  let stringQuery = `SELECT articles.author, title, article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.body) AS comment_count FROM articles LEFT JOIN comments USING (article_id) GROUP BY article_id`;
+  let stringQuery = `SELECT articles.author, title, article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.body) AS comment_count , (select count(*)from articles)::int as total_count FROM articles LEFT JOIN comments USING (article_id) GROUP BY article_id`;
   return fetchTopics()
     .then((topics) => {
       topics.forEach((topic) => {
@@ -53,6 +59,13 @@ function fetchArticles(topic = "", sort_by = "created_at", order = "desc") {
       stringQuery += ` ORDER by ${sort_by} ${order}`;
     })
     .then(() => {
+      if (limit) {
+        stringQuery += ` limit ${limit}`;
+      }
+      if (page) {
+        stringQuery += ` offset ${(page - 1) * limit}`;
+      }
+
       return db.query(stringQuery);
     })
     .then((result) => {
@@ -76,7 +89,6 @@ function insertArticle(author, title, topic, body, article_image_url) {
   return db
     .query(query)
     .then((result) => {
-      console.log(result.rows[0].article_id);
       const newarticle_id = result.rows[0].article_id;
       return newarticle_id;
     })
