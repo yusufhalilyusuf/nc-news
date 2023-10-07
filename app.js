@@ -6,7 +6,7 @@ const {
   getArticles,
   patchArticle,
 } = require("./controllers/articles.controller");
-const { customErrorHandler } = require("./controllers/errors.controller");
+const { customErrorHandler, psqlErrorHandler } = require("./controllers/errors.controller");
 const {
   getCommentsByArticleId,
   postCommentByArticleId,
@@ -34,6 +34,7 @@ app.use('/api', apiRouter);
 
 
 app.use(customErrorHandler);
+app.use(psqlErrorHandler)
 
 app.all("/*", (req, res, next) => {
   res.status(404).send({ message: "path not found" });

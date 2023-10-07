@@ -70,10 +70,29 @@ function patchArticleinDb(article_id, vote) {
   });
 }
 
+function insertArticle(author, title, topic, body, article_image_url) {
+  const query = `insert into articles(author,title,topic,body,article_img_url) 
+  values('${author}','${title}','${topic}','${body}','${article_image_url}') returning *`;
+  return db
+    .query(query)
+    .then((result) => {
+      console.log(result.rows[0].article_id);
+      const newarticle_id = result.rows[0].article_id;
+      return newarticle_id;
+    })
+    .then((newarticle_id) => {
+      return fetchArticlesById(newarticle_id);
+    })
+    .then((result) => {
+      return result;
+    });
+}
+
 module.exports = {
   fetchArticlesById,
   fetchArticles,
   patchArticleinDb,
+  insertArticle,
 };
 
 function getArticleColumns() {

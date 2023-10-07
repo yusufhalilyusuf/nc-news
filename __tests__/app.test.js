@@ -639,7 +639,90 @@ describe("tests for PATCH /api/comments/:comment_id", () => {
   test("should return 400 status code if inc_vote value is not a number", () => {
     return request(app)
       .patch("/api/comments/3")
-      .send({ inc_votes: '1hola' })
+      .send({ inc_votes: "1hola" })
       .expect(400);
+  });
+});
+
+describe("tests for POST /api/articles", () => {
+  test("should return 200 status code and new article", () => {
+    const articleToPost = {
+      author: "rogersop",
+      title: "UNCOVERED: catspiracy to bring down democracy",
+      topic: "cats",
+      body: "example body",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+    return request(app)
+      .post("/api/articles")
+      .send(articleToPost)
+      .expect(201)
+      .then(({ body }) => {
+        console.log(body);
+        const newArticle = body.article[0];
+        expect(newArticle).toHaveProperty("article_id");
+        expect(newArticle).toHaveProperty("title");
+        expect(newArticle).toHaveProperty("topic");
+        expect(newArticle).toHaveProperty("author");
+        expect(newArticle).toHaveProperty("body");
+        expect(newArticle).toHaveProperty("created_at");
+        expect(newArticle).toHaveProperty("votes");
+        expect(newArticle).toHaveProperty("article_img_url");
+        expect(newArticle).toHaveProperty("comment_count");
+      });
+  });
+  test("should return 400 status code if author doesn't exist in db", () => {
+    const articleToPost = {
+      author: "rogersops",
+      title: "UNCOVERED: catspiracy to bring down democracy",
+      topic: "cats",
+      body: "example body",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+    return request(app)
+      .post("/api/articles")
+      .send(articleToPost)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("author doesn't exist");
+      });
+  });
+  test("should return 400 status code if topic doesn't exist in db", () => {
+    const articleToPost = {
+      author: "rogersop",
+      title: "UNCOVERED: catspiracy to bring down democracy",
+      topic: "catsssss",
+      body: "example body",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+    return request(app)
+      .post("/api/articles")
+      .send(articleToPost)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("topic doesn't exist");
+      });
+  });
+  test("should return 400 status code there are other properties in body", () => {
+    const articleToPost = {
+      hola: "hey",
+      author: "rogersop",
+      title: 123,
+      topic: "cats",
+      body: "example body",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      some: "thing",
+    };
+    return request(app)
+      .post("/api/articles")
+      .send(articleToPost)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("remove unnecessary properties");
+      });
   });
 });

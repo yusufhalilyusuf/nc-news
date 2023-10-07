@@ -2,6 +2,7 @@ const {
   fetchArticlesById,
   fetchArticles,
   patchArticleinDb,
+  insertArticle
 } = require("../models/articles.model");
 const { fetchTopics } = require("../models/topics.model");
 
@@ -51,8 +52,21 @@ function patchArticle(req, res, next) {
     .catch(next);
 }
 
+function postArticle(req,res,next){
+  const {author,title,topic,body,article_img_url} = req.body
+  if(Object.keys(req.body).length!=5){
+    return next({status:400, message:'remove unnecessary properties'})
+  }
+  insertArticle(author,title,topic,body,article_img_url).then((result)=>{
+    res.status(201).send({article: result})
+  }).catch(err=>{
+    next(err)
+  })
+}
+
 module.exports = {
   getArticlesById,
   getArticles,
   patchArticle,
+  postArticle
 };
