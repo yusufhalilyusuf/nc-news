@@ -100,11 +100,19 @@ function insertArticle(author, title, topic, body, article_image_url) {
     });
 }
 
+function deleteFromDb(article_id) {
+  return fetchArticlesById(article_id).then(() => {
+    const queryString = `delete from articles where article_id=$1`;
+    return db.query(queryString, [article_id]);
+  });
+}
+
 module.exports = {
   fetchArticlesById,
   fetchArticles,
   patchArticleinDb,
   insertArticle,
+  deleteFromDb,
 };
 
 function getArticleColumns() {

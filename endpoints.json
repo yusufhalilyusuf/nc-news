@@ -2,6 +2,7 @@
   "GET /api": {
     "description": "serves up a json representation of all the available endpoints of the api"
   },
+
   "GET /api/topics": {
     "description": "serves an array of all topics",
     "queries": [],
@@ -16,6 +17,7 @@
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
+
   "GET /api/articles": {
     "description": "serves an array of all articles",
     "queries": ["author", "topic", "sort_by", "order", "limit", "p"],
@@ -80,7 +82,6 @@
       ]
     }
   },
-
   "GET /api/articles/:article_id": {
     "description": "serves an array of article",
     "queries": [],
@@ -99,7 +100,6 @@
       ]
     }
   },
-
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of all comments for given article id",
     "queries": [],
@@ -116,7 +116,6 @@
       ]
     }
   },
-
   "POST /api/articles/:article_id/comments": {
     "description": "serves a posted comment object for given article id",
     "queries": [],
@@ -124,7 +123,6 @@
       "comment": "it was good"
     }
   },
-
   "PATCH /api/articles/:article_id": {
     "description": "serves an array of updated article",
     "queries": [],
@@ -161,8 +159,7 @@
       ]
     }
   },
-
-  " DELETE /api/comments/:comment_id": {
+  " DELETE /api/articles/:article_id": {
     "description": "deletes the comment ",
     "queries": [],
     "exampleResponse": {}
@@ -181,7 +178,6 @@
       ]
     }
   },
-
   "GET /api/users/:username": {
     "description": "serves an array of the users",
     "queries": [],
@@ -195,6 +191,7 @@
       ]
     }
   },
+
   "GET /api/comments/:comment_id": {
     "description": "serves an array of updated comment",
     "queries": [],
@@ -210,5 +207,10 @@
         }
       ]
     }
+  },
+  " DELETE /api/comments/:comment_id": {
+    "description": "deletes the comment ",
+    "queries": [],
+    "exampleResponse": {}
   }
 }
