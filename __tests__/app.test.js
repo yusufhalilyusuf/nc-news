@@ -815,3 +815,61 @@ describe("tests for POST /api/articles", () => {
       });
   });
 });
+
+describe.only("tests for POST /api/topics", () => {
+  test("should return 200 status code", () => {
+    const newTopic = {
+      "slug": "new topic name",
+      "description": "some description"
+    }
+    return request(app).post("/api/topics")
+    .send(newTopic)
+    .expect(200)
+    .then(({body})=>{
+      expect(body).toEqual({
+        topic: [ { slug: 'new topic name', description: 'some description' } ]
+      })
+    })
+  });
+
+  test("should return 400 status code if there are other properties in object", () => {
+    const newTopic = {
+      "slug": "new topic name",
+      "description": "some description",
+      "extraProperty":'extra'
+    }
+    return request(app).post("/api/topics")
+    .send(newTopic)
+    .expect(400)
+    .then(({body})=>{
+      expect(body.message).toBe('remove unnecesary properties')
+    })
+  });
+  test("should return 400 status code if required property doesn't exist in body", () => {
+    const newTopic = {
+      "slugssss": "new topic name",
+      "description": "some description"
+    }
+    return request(app).post("/api/topics")
+    .send(newTopic)
+    .expect(400)
+    .then(({body})=>{
+      expect(body.message).toBe('slug is required')
+    })
+  });
+  test("should return 400 status code if required property doesn't exist in body", () => {
+    const newTopic = {
+      "slug": "new topic name",
+      "descriptionsss": "some description"
+    }
+    return request(app).post("/api/topics")
+    .send(newTopic)
+    .expect(400)
+    .then(({body})=>{
+      console.log(body);
+      expect(body.message).toBe('description is required')
+    })
+  });
+});
+
+  
