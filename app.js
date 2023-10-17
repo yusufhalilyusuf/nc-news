@@ -6,7 +6,10 @@ const {
   getArticles,
   patchArticle,
 } = require("./controllers/articles.controller");
-const { customErrorHandler, psqlErrorHandler } = require("./controllers/errors.controller");
+const {
+  customErrorHandler,
+  psqlErrorHandler,
+} = require("./controllers/errors.controller");
 const {
   getCommentsByArticleId,
   postCommentByArticleId,
@@ -16,12 +19,14 @@ const { getUsers } = require("./controllers/users.controller");
 const { apiRouter } = require("./routes/api.router");
 const { topicsRouter } = require("./routes/topics.router");
 const { usersRouter } = require("./routes/users.router");
-
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
 
 const app = express();
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use(express.json());
 
-app.use('/api', apiRouter);
+app.use("/api", apiRouter);
 // app.get("/api", getAllEndpoints);
 // app.get("/api/topics", getTopics);
 // app.get("/api/users", getUsers);
@@ -32,9 +37,8 @@ app.use('/api', apiRouter);
 // app.patch("/api/articles/:article_id", patchArticle);
 // app.delete("/api/comments/:comment_id", deleteComment);
 
-
 app.use(customErrorHandler);
-app.use(psqlErrorHandler)
+app.use(psqlErrorHandler);
 
 app.all("/*", (req, res, next) => {
   res.status(404).send({ message: "path not found" });

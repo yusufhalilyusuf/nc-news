@@ -29,7 +29,9 @@
     "jest-extended": "^2.0.0",
     "jest-sorted": "^1.0.14",
     "pg-format": "^1.0.4",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "swagger-autogen": "^2.23.6",
+    "swagger-ui-express": "^5.0.0"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
@@ -43,5 +45,4 @@
       "jest-sorted"
     ]
   }
-  
 }
