@@ -21,8 +21,10 @@ const { topicsRouter } = require("./routes/topics.router");
 const { usersRouter } = require("./routes/users.router");
 const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('./swagger_output.json')
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use(express.json());
 
