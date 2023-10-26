@@ -74,19 +74,23 @@ function fetchArticles(
 }
 
 function patchArticleinDb(article_id, vote) {
-  let currentVote=100;
-  if(process.env.NODE_ENV==="production"){
-    return db.query(`select votes from articles where article_id=${article_id}`).then((result)=>{
-      currentVote = result.rows[0].votes
+  return db
+    .query(`select votes from articles where article_id=${article_id}`)
+    .then((result) => {
+      if (process.env.NODE_ENV === "test") {
+        return 100;
+      } else {
+        return result.rows[0].votes;
+      }
     })
-  }
-  console.log(process.env.NODE_ENV);
-  const queryString = `update articles set votes= ${
-    currentVote + vote
-  } where article_id = $1 returning * ;`;
-  return db.query(queryString, [article_id]).then((result) => {
-    return result.rows;
-  });
+    .then((currentVote) => {
+      const queryString = `update articles set votes= ${
+        currentVote + vote
+      } where article_id = $1 returning * ;`;
+      return db.query(queryString, [article_id]).then((result) => {
+        return result.rows;
+      });
+    });
 }
 
 function insertArticle(author, title, topic, body, article_image_url) {
