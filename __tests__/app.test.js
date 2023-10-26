@@ -108,7 +108,7 @@ describe("GET /api/articles/:articleId", () => {
       author: "butter_bridge",
       body: "I find this existence challenging",
       created_at: "2020-07-09T21:11:00.000Z",
-      votes: 100,
+      votes: 30,
       article_img_url:
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
       comment_count: 11,
@@ -591,7 +591,7 @@ describe("GET /api/articles?query", () => {
           article_id: 5,
           topic: "cats",
           created_at: "2020-08-03T14:14:00.000Z",
-          votes: 0,
+          votes: 17,
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
           comment_count: "2",

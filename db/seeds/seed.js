@@ -113,7 +113,18 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         )
       );
       return db.query(insertCommentsQueryStr);
-    });
+    }).then(()=>{
+      return db.query('SELECT article_id ,sum(votes) from comments group by article_id;')
+    }).then((res)=>{
+      const arr = res.rows
+      const promiseArray =[]
+      arr.forEach((article)=>{
+        promiseArray.push(db.query(`update articles set votes =${article.sum} where article_id=${article.article_id}`))
+      })
+      return Promise.all(promiseArray)
+
+    })
+    
 };
 
 module.exports = seed;
