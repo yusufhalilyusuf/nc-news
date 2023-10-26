@@ -77,9 +77,10 @@ function patchArticleinDb(article_id, vote) {
   let currentVote=100;
   if(process.env.NODE_ENV==="production"){
     return db.query(`select votes from articles where article_id=${article_id}`).then((result)=>{
-      currentVote = result
+      currentVote = result.rows[0].votes
     })
   }
+  console.log(process.env.NODE_ENV);
   const queryString = `update articles set votes= ${
     currentVote + vote
   } where article_id = $1 returning * ;`;
