@@ -74,7 +74,13 @@ function fetchArticles(
 }
 
 function patchArticleinDb(article_id, vote) {
-  const currentVote = 100;
+  let currentVote=100;
+  if(process.env.NODE_ENV==="production"){
+    return db.query(`select votes from articles where article_id=${article_id}`).then((result)=>{
+      currentVote = result
+    })
+  }
+  
   const queryString = `update articles set votes= ${
     currentVote + vote
   } where article_id = $1 returning * ;`;
