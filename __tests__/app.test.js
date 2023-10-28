@@ -218,10 +218,10 @@ describe("GET /api/articles", () => {
   });
   test("should return 5 articles starting from 6 if limit is 5 and page is 2", () => {
     return request(app)
-      .get("/api/articles?sort_by=article_id&order=asc&limit=5&page=2")
+      .get("/api/articles?sort_by=comment_count&order=asc&limit=5&page=2")
       .expect(200)
       .then(({ body }) => {
-        expect(body.articles[0].article_id).toBe(6);
+        expect(body.articles[0].article_id).toBe(7);
       });
   });
   test("should return 400 if limit is not a number", () => {

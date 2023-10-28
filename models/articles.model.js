@@ -45,6 +45,7 @@ function fetchArticles(
       return getArticleColumns();
     })
     .then((allowedSorts) => {
+      allowedSorts.push('comment_count')
       if (!allowedSorts.includes(sort_by)) {
         return Promise.reject({
           status: 400,
