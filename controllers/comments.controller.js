@@ -31,7 +31,7 @@ function postCommentByArticleId(req, res, next) {
       return insertComment(req.body, body, article_id, username);
     })
     .then((result) => {
-      res.status(201).send({ comment: result });
+      res.status(201).send(result);
     })
     .catch(next);
 }
