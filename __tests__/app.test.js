@@ -366,7 +366,8 @@ describe("POST  /api/articles/:article_id/comments", () => {
       .send(validBody)
       .expect(201)
       .then(({ body }) => {
-        expect(body).toEqual({ comment: "it was good" });
+        console.log(body);
+        expect(body).toEqual({ comment: "it was good", id:19 });
       });
   });
   test("should return 404 status code if article id doesn't exist", () => {

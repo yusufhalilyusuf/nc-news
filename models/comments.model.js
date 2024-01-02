@@ -44,7 +44,7 @@ function insertComment(body, commentToBeInserted, article_id, username) {
       return db.query(queryString, [article_id, commentToBeInserted, author]);
     })
     .then((res) => {
-      return res.rows[0].body;
+      return {comment:res.rows[0].body, id: res.rows[0].comment_id};
     });
 }
 
